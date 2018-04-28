@@ -1,7 +1,7 @@
 {% extends 'layout.html.twig' %}
-
+{% block title %}Mise à jour du contact | simple-mvc-test{% endblock %}
 {% block content %}
-    <h1>Edit contact {{ contact.title }}</h1>
+    <h1>Modification du contact {{ contact.lastname }} ({{ contact.id }})</h1>
     {% include 'Contact/_form.html.twig' %}
     <a href="/" class="btn btn-info btn-sm">Back</a>
 {% endblock %}

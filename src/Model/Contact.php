@@ -25,6 +25,9 @@ class Contact
 
     private $created_at;
 
+    private $updated_at;
+
+
     /**
      * @return mixed
      */
@@ -105,5 +108,20 @@ class Contact
         $this->created_at = $created_at;
     }
 
+    /**
+     * @return mixed
+     */
+    public function getUpdatedAt()
+    {
+        return new \DateTime($this->updated_at);//updated_at an date Object which will be formated in twig;
+    }
+
+    /**
+     * @param mixed $updated_at
+     */
+    public function setUpdatedAt($updated_at)
+    {
+        $this->updated_at = $updated_at;
+    }
 
 }

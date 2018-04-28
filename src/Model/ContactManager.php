@@ -33,9 +33,9 @@ class ContactManager extends AbstractManager
      */
     public function selectAll(): array
     {
-        return $this->pdoConnection->query('SELECT co.id, co.lastname, co.firstname, co.created_at, ci.civility FROM ' .
+        return $this->pdoConnection->query('SELECT co.id, co.lastname, co.firstname, co.created_at, co.updated_at, ci.civility FROM ' .
             $this->table . ' as co INNER JOIN ' .
-            self::TABLE_JOIN . ' as ci ON co.civility_id = ci.id', \PDO::FETCH_CLASS, $this->className)->fetchAll();
+            self::TABLE_JOIN . ' as ci ON co.civility_id = ci.id ORDER BY co.lastname', \PDO::FETCH_CLASS, $this->className)->fetchAll();
     }
 
 

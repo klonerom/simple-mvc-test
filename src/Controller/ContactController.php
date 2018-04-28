@@ -109,8 +109,33 @@ class ContactController extends AbstractController
      */
     public function add()
     {
-        // TODO : add a new item
-        return $this->twig->render('Contact/add.html.twig');
+        //Update asking
+        if (!empty($_POST)) {
+            $contactAdd = [];
+
+            $contactAdd = [
+                //'id' => $id,
+                'lastname' => $_POST['lastname'],
+                'firstname' => $_POST['firstname'],
+                'civility_id' => $_POST['civility'],
+            ];
+
+            //contact object
+            $contactManager = new ContactManager();
+
+            $contactManager->insert($contactAdd);
+
+            header('Location: /');
+            die;
+        }
+
+        //civility object
+        $civilityManager = new CivilityManager();
+        $civilities = $civilityManager->selectAll(); //Complete list of civilities (for select in twig)
+
+        return $this->twig->render('Contact/add.html.twig', [
+            'civilities' => $civilities,
+        ]);
     }
 
     /**
@@ -122,7 +147,11 @@ class ContactController extends AbstractController
      */
     public function delete(int $id)
     {
-        // TODO : delete the item with id $id
-        return $this->twig->render('Contact/index.html.twig');
+        $contactManager = new ContactManager();
+        $contact = $contactManager->delete($id);
+
+        $contacts = $contactManager->selectAll();
+
+        return $this->twig->render('Contact/index.html.twig', ['contacts' => $contacts]);
     }
 }
