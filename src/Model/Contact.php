@@ -23,6 +23,8 @@ class Contact
 
     private $civility_id;
 
+    private $created_at;
+
     /**
      * @return mixed
      */
@@ -85,6 +87,22 @@ class Contact
     public function setCivilityId($civility_id)
     {
         $this->civility_id = $civility_id;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getCreatedAt()
+    {
+        return new \DateTime($this->created_at);//created_at an date Object which will be formated in twig;
+    }
+
+    /**
+     * @param mixed $created_at
+     */
+    public function setCreatedAt($created_at)
+    {
+        $this->created_at = $created_at;
     }
 
 

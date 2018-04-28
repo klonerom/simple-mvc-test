@@ -2,11 +2,27 @@
 
 {% block content %}
     <h1>Contacts</h1>
-    <ul>
+    <table>
+    <tr>
+        <th>id</th>
+        <th>NOM Prénom</th>
+        <th>Date de création</th>
+        <th>Actions</th>
+    </tr>
         {% for contact in contacts %}
-            <li><a href="/item/{{ contact.id }}">{{ contact.id }}. {{ contact.lastname }}</a></li>
+        <tr>
+            <td>{{ contact.id }}</td>
+            <td>{{ contact.lastname|upper }} {{ contact.firstname|capitalize }}</td>
+            <td>{{ contact.createdAt|date('d/m/y') }}</td>
+            <td><ul>
+                    <li><a href="/contact/{{ contact.id }}">Show</a></li>
+                    <li><a href="/contact/{{ contact.id }}">Edit</a></li>
+                    <li><a href="/contact/{{ contact.id }}">Delete</a></li>
+                </ul>
+            </td>
         {% else %}
             <li>Nothing to display</li>
         {% endfor %}
-    </ul>
+        </tr>
+    </table>
 {% endblock %}

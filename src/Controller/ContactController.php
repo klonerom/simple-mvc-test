@@ -27,7 +27,7 @@ class ContactController extends AbstractController
     {
         $contactManager = new ContactManager();
         $contacts = $contactManager->selectAll();
-
+        //var_dump($contacts);die;
         return $this->twig->render('Contact/index.html.twig', ['contacts' => $contacts]);
     }
 
