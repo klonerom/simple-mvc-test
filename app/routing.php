@@ -11,9 +11,15 @@
 
 $routes = [
     'Item' => [ // Controller
-        ['index', '/', 'GET'], // action, url, method
+        ['index', '/item/', 'GET'], // action, url, method
         ['add', '/item/add', 'GET'], // action, url, method
         ['edit', '/item/edit/{id:\d+}', 'GET'], // action, url, method
         ['show', '/item/{id:\d+}', 'GET'], // action, url, method
+    ],
+    'Contact' => [ // Controller
+        ['index', '/', 'GET'], // action, url, method
+        ['add', '/contact/add', 'GET'], // action, url, method
+        ['edit', '/contact/edit/{id:\d+}', 'GET'], // action, url, method
+        ['show', '/contact/{id:\d+}', 'GET'], // action, url, method
     ],
 ];
