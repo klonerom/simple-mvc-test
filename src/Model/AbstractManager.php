@@ -80,7 +80,7 @@ abstract class AbstractManager
      */
     public function insert(array $data)
     {
-        //TODO : Implements SQL INSERT request
+        //TO DO
     }
 
 
@@ -90,6 +90,6 @@ abstract class AbstractManager
      */
     public function update(int $id, array $data)
     {
-        //TODO : Implements SQL UPDATE request
+        //TO DO
     }
 }

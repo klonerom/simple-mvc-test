@@ -18,8 +18,9 @@ $routes = [
     ],
     'Contact' => [ // Controller
         ['index', '/', 'GET'], // action, url, method
-        ['add', '/contact/add', 'GET'], // action, url, method
-        ['edit', '/contact/edit/{id:\d+}', 'GET'], // action, url, method
         ['show', '/contact/{id:\d+}', 'GET'], // action, url, method
+        ['add', '/contact/add', 'GET'], // action, url, method
+        ['edit', '/contact/edit/{id:\d+}', ['GET', 'POST']], // action, url, method
+        ['delete', '/contact/delete/{id:\d+}', 'GET'], // action, url, method
     ],
 ];
