@@ -26,10 +26,20 @@ class ContactController extends AbstractController
      */
     public function index()
     {
+        $message = null;
+
+        if (isset($_SESSION['message'])) {
+            $message = $_SESSION['message'];
+            unset($_SESSION['message']);
+        }
+
         $contactManager = new ContactManager();
         $contacts = $contactManager->selectAll();
 
-        return $this->twig->render('Contact/index.html.twig', ['contacts' => $contacts]);
+        return $this->twig->render('Contact/index.html.twig', [
+            'contacts' => $contacts,
+            'message' => $message,
+            ]);
     }
 
     /**
@@ -82,6 +92,8 @@ class ContactController extends AbstractController
 
             $contactManager->update($id, $contactUpdate);
 
+            $_SESSION['message'] = $contactUpdate['lastname'] . ' ' . $contactUpdate['firstname'] . ' est modifié(e) !';
+
             header('Location: /');
             die;
         }
@@ -125,6 +137,8 @@ class ContactController extends AbstractController
 
             $contactManager->insert($contactAdd);
 
+            $_SESSION['message'] = $contactAdd['lastname'] . ' ' . $contactAdd['firstname'] . ' est ajouté(e) !';
+
             header('Location: /');
             die;
         }
@@ -147,11 +161,20 @@ class ContactController extends AbstractController
      */
     public function delete(int $id)
     {
+        $message = null;
+
         $contactManager = new ContactManager();
-        $contact = $contactManager->delete($id);
+        $contact = $contactManager->selectOneById($id);
+
+        $contactManager->delete($id);
 
         $contacts = $contactManager->selectAll();
 
-        return $this->twig->render('Contact/index.html.twig', ['contacts' => $contacts]);
+        $message = $contact->getLastname() . ' ' . $contact->getFirstname() . ' est supprimé !';
+
+        return $this->twig->render('Contact/index.html.twig', [
+            'contacts' => $contacts,
+            'message' => $message,
+        ]);
     }
 }

@@ -25,7 +25,6 @@ class ContactManager extends AbstractManager
         parent::__construct(self::TABLE);
     }
 
-
     /**
      * Get all row from database.
      *
@@ -37,7 +36,6 @@ class ContactManager extends AbstractManager
             $this->table . ' as co INNER JOIN ' .
             self::TABLE_JOIN . ' as ci ON co.civility_id = ci.id ORDER BY co.lastname', \PDO::FETCH_CLASS, $this->className)->fetchAll();
     }
-
 
     /**
      * INSERT one row in dataase

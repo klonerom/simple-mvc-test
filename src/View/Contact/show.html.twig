@@ -21,12 +21,12 @@
             <td>{{ contact.createdAt|date('d/m/Y H:i') }}</td>
             <td>{{ contact.updatedAt|date('d/m/Y H:i') }}</td>
             <td><ul style="list-style: none;display: inline-flex;">
-                    <li style="margin-right: 10px;"><a href="/contact/edit/{{ contact.id }}" class="btn btn-outline-secondary btn-sm">Edit</a></li>
-                    <li style="margin-right: 10px;"><a href="/contact/delete/{{ contact.id }}" class="btn btn-outline-danger btn-sm">Delete</a></li>
+                    <li style="margin-right: 10px;"><a href="/contact/edit/{{ contact.id }}" class="btn btn-outline-secondary btn-sm"><i class="far fa-edit"></i> Edit</a></li>
+                    <li style="margin-right: 10px;"><a href="/contact/delete/{{ contact.id }}" class="btn btn-outline-danger btn-sm"><i class="far fa-trash-alt"></i> Delete</a></li>
                 </ul>
             </td>
         </tr>
         </tbody>
     </table>
-    <a href="/" class="btn btn-info btn-sm">Back</a>
+    <a href="/" class="btn btn-info btn-sm"><i class="far fa-arrow-alt-circle-left"></i> Back</a>
 {% endblock %}
