@@ -54,15 +54,22 @@ class ContactController extends AbstractController
         $contactManager = new ContactManager();
         $contact = $contactManager->selectOneById($id);
 
-        //civility object
-        $civilityManager = new CivilityManager();
-        $civilityContact = $civilityManager->selectOneById($contact->getCivilityId()); //contact civility (for selected in twig select)
+        if ($contact) { //id existe => requete = true
+            //civility object
+            $civilityManager = new CivilityManager();
+            $civilityContact = $civilityManager->selectOneById($contact->getCivilityId()); //contact civility (for selected in twig select)
 
-
-        return $this->twig->render('Contact/show.html.twig', [
-            'contact' => $contact,
-            'civilityId' => $civilityContact,
+            return $this->twig->render('Contact/show.html.twig', [
+                'contact' => $contact,
+                'civilityId' => $civilityContact,
             ]);
+
+        } else {
+            $_SESSION['message'] = ' Id inconnu ! Action annulée';
+
+            header('Location: /');
+            die;
+        }
     }
 
     /**
@@ -85,8 +92,6 @@ class ContactController extends AbstractController
                 'civility_id' => $_POST['civility'],
             ];
 
-            //var_dump($contactUpdate);die;
-
             //contact object
             $contactManager = new ContactManager();
 
@@ -102,16 +107,24 @@ class ContactController extends AbstractController
         $contactManager = new ContactManager();
         $contact = $contactManager->selectOneById($id);
 
-        //civility object
-        $civilityManager = new CivilityManager();
-        $civilities = $civilityManager->selectAll(); //Complete list of civilities (for select in twig)
-        $civilityContact = $civilityManager->selectOneById($contact->getCivilityId()); //contact civility (for selected in twig select)
+        if ($contact) {//id existe => requete = true
+            //civility object
+            $civilityManager = new CivilityManager();
+            $civilities = $civilityManager->selectAll(); //Complete list of civilities (for select in twig)
+            $civilityContact = $civilityManager->selectOneById($contact->getCivilityId()); //contact civility (for selected in twig select)
 
-        return $this->twig->render('Contact/edit.html.twig', [
-            'contact' => $contact,
-            'civilityContact' => $civilityContact,
-            'civilities' => $civilities,
-        ]);
+            return $this->twig->render('Contact/edit.html.twig', [
+                'contact' => $contact,
+                'civilityContact' => $civilityContact,
+                'civilities' => $civilities,
+            ]);
+
+        } else {
+            $_SESSION['message'] = ' Id inconnu ! Action annulée';
+
+            header('Location: /');
+            die;
+        }
     }
 
     /**
@@ -166,15 +179,23 @@ class ContactController extends AbstractController
         $contactManager = new ContactManager();
         $contact = $contactManager->selectOneById($id);
 
-        $contactManager->delete($id);
+        if ($contact) {
+            $contactManager->delete($id);
 
-        $contacts = $contactManager->selectAll();
+            $contacts = $contactManager->selectAll();
 
-        $message = $contact->getLastname() . ' ' . $contact->getFirstname() . ' est supprimé !';
+            $message = $contact->getLastname() . ' ' . $contact->getFirstname() . ' est supprimé !';
 
-        return $this->twig->render('Contact/index.html.twig', [
-            'contacts' => $contacts,
-            'message' => $message,
-        ]);
+            return $this->twig->render('Contact/index.html.twig', [
+                'contacts' => $contacts,
+                'message' => $message,
+            ]);
+
+        } else {
+        $_SESSION['message'] = ' Id inconnu ! Action annulée';
+
+        header('Location: /');
+        die;
+        }
     }
 }
