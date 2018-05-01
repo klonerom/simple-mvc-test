@@ -7,6 +7,11 @@
  */
 session_start();
 
+//Timezone of application
+$timezone = 'Europe/Paris';
+date_default_timezone_set($timezone);
+
+
 if (preg_match('/\.(?:png|jpg|jpeg|gif)$/', $_SERVER["REQUEST_URI"])) {
     return false;    // retourne la requête telle quelle.
 }
