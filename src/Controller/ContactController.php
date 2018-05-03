@@ -11,6 +11,7 @@ namespace Controller;
 
 use Model\CivilityManager;
 use Model\ContactManager;
+use Model\Contact;
 
 /**
  * Class ItemController
@@ -81,26 +82,46 @@ class ContactController extends AbstractController
      */
     public function edit(int $id)
     {
+        //init
+        $error = [];
+
         //Update asking
         if (!empty($_POST)) {
             $contactUpdate = [];
 
-            $contactUpdate = [
-                //'id' => $id,
-                'lastname' => $_POST['lastname'],
-                'firstname' => $_POST['firstname'],
-                'civility_id' => $_POST['civility'],
-            ];
+            //Test date form
+            if (!empty($_POST['lastname'])) {
+                $contactUpdate['lastname'] = $_POST['lastname'];
+            } else {
+                $error['lastname'] = 'le nom n\'est pas renseigné !';
+            }
 
-            //contact object
-            $contactManager = new ContactManager();
+            if (!empty($_POST['firstname'])) {
 
-            $contactManager->update($id, $contactUpdate);
+                $contactUpdate['firstname'] = $_POST['firstname'];
+            } else {
+                $error['firstname'] = 'le prénom n\'est pas renseigné !';
+            }
 
-            $_SESSION['message'] = $contactUpdate['lastname'] . ' ' . $contactUpdate['firstname'] . ' est modifié(e) !';
+            if (!empty($_POST['civility'])) {
+                $contactUpdate['civility_id'] = $_POST['civility'];
+            } else {
+                $error['civility'] = 'la civilité n\'est pas renseignée !';
+            }
 
-            header('Location: /');
-            die;
+            //Form ok
+            if (empty($error['lastname']) && empty($error['firstname']) && empty($error['civility'])) {
+
+                //contact manager object
+                $contactManager = new ContactManager();
+
+                $contactManager->update($id, $contactUpdate);
+
+                $_SESSION['message'] = $contactUpdate['lastname'].' '.$contactUpdate['firstname'].' est modifié(e) !';
+
+                header('Location: /');
+                die;
+            }
         }
 
         //contact object
@@ -111,12 +132,11 @@ class ContactController extends AbstractController
             //civility object
             $civilityManager = new CivilityManager();
             $civilities = $civilityManager->selectAll(); //Complete list of civilities (for select in twig)
-            $civilityContact = $civilityManager->selectOneById($contact->getCivilityId()); //contact civility (for selected in twig select)
 
             return $this->twig->render('Contact/edit.html.twig', [
                 'contact' => $contact,
-                'civilityContact' => $civilityContact,
                 'civilities' => $civilities,
+                'error' => $error,
             ]);
 
         } else {
@@ -134,26 +154,53 @@ class ContactController extends AbstractController
      */
     public function add()
     {
+        //init
+        $contact = [];
+        $error = [];
+
         //Update asking
         if (!empty($_POST)) {
-            $contactAdd = [];
 
-            $contactAdd = [
-                //'id' => $id,
-                'lastname' => $_POST['lastname'],
-                'firstname' => $_POST['firstname'],
-                'civility_id' => $_POST['civility'],
-            ];
+            //Test date form
+            if (!empty($_POST['lastname'])) {
+                $contact['lastname'] = $_POST['lastname'];
+            } else {
+                $error['lastname'] = 'le nom n\'est pas renseigné !';
+            }
 
-            //contact object
-            $contactManager = new ContactManager();
+            if (!empty($_POST['firstname'])) {
+                $contact['firstname'] = $_POST['firstname'];
+            } else {
+                $error['firstname'] = 'le prénom n\'est pas renseigné !';
+            }
 
-            $contactManager->insert($contactAdd);
+            if (!empty($_POST['civility'])) {
+               $contact['civility_id'] = (int) $_POST['civility']; //civility_id pour insert en bdd
+            } else {
+                $error['civility'] = 'la civilité n\'est pas renseignée !';
+            }
 
-            $_SESSION['message'] = $contactAdd['lastname'] . ' ' . $contactAdd['firstname'] . ' est ajouté(e) !';
+            //Form ok => ajout en base + redirection sur list des contact (index)
+            if (empty($error['lastname']) && empty($error['firstname']) && empty($error['civility'])) {
 
-            header('Location: /');
-            die;
+                //contact object
+                $contactManager = new ContactManager();
+
+                $contactManager->insert($contact);
+
+                $_SESSION['message'] = $contact['lastname'].' '.$contact['firstname'].' est ajouté(e) !';
+
+                header('Location: /');
+                die;
+            } else {
+                //OK mais A revoir pour amélioration : dans cette methode on passe son un object contact->civilityId soit un tableau contact['civility_id'] alors que dans twig contact.civilityId demandé et contact_id en base.
+                //  si object ok pour passer de contactId twig à contact_id en bdd (la class Contact est prévue pour)
+                //Ici on passe un objet avec les données saisies mais non enregistrer en bdd car incomplète
+                $contact = new Contact();
+                $contact->setLastname($_POST['lastname']);
+                $contact->setFirstname($_POST['firstname']);
+                $contact->setCivilityId((int) $_POST['civility']);
+            }
         }
 
         //civility object
@@ -161,7 +208,9 @@ class ContactController extends AbstractController
         $civilities = $civilityManager->selectAll(); //Complete list of civilities (for select in twig)
 
         return $this->twig->render('Contact/add.html.twig', [
+            'contact' => $contact,
             'civilities' => $civilities,
+            'error' => $error,
         ]);
     }
 
